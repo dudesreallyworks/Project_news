@@ -1,0 +1,83 @@
+Создание двух пользователей:
+
+from django.contrib.auth.models import User
+
+user1 = User.objects.create_user('username1')
+user2 = User.objects.create_user('username2')
+
+Создание двух объектов модели Author, связанных с пользователями:
+
+from your_app.models import Author
+
+author1 = Author.objects.create(user=user1)
+author2 = Author.objects.create(user=user2)
+
+Добавление 4 категорий в модель Category:
+
+from your_app.models import Category
+
+category1 = Category.objects.create(name='Category 1')
+category2 = Category.objects.create(name='Category 2')
+category3 = Category.objects.create(name='Category 3')
+category4 = Category.objects.create(name='Category 4')
+
+Добавление 2 статей и 1 новости:
+
+from django.contrib.auth.models import User
+from myapp.models import Category, Article, News, Post, Comment
+
+category1 = Category.objects.create(name='Категория 1')
+category2 = Category.objects.create(name='Категория 2')
+
+article1 = Article.objects.create(title='Статья 1', content='Содержание статьи 1', preview='Превью статьи 1')
+article1.categories.add(category1)
+
+article2 = Article.objects.create(title='Статья 2', content='Содержание статьи 2', preview='Превью статьи 2')
+article2.categories.add(category1, category2)
+
+news1 = News.objects.create(title='Новость 1', content='Содержание новости 1', preview='Превью новости 1')
+news1.categories.add(category2)
+
+Создайте комментарии к разным объектам модели Post:
+
+post1_comment1 = Comment.objects.create(post=article1, text='Комментарий к статье 1')
+post1_comment2 = Comment.objects.create(post=article1, text='Второй комментарий к статье 1')
+
+post2_comment1 = Comment.objects.create(post=article2, text='Комментарий к статье 2')
+post2_comment2 = Comment.objects.create(post=article2, text='Второй комментарий к статье 2')
+
+Примените функции like() и dislike() для рейтингов статей/новостей и комментариев:
+
+article1.like()
+article1.like()
+article2.like()
+article2.dislike()
+
+post1_comment1.like()
+post1_comment1.like()
+post2_comment1.like()
+post2_comment1.dislike()
+
+Обновите рейтинги пользователей:
+
+users = User.objects.all()
+for user in users:
+    user.update_rating()
+
+Выведите username и рейтинг лучшего пользователя:
+
+best_user = User.objects.order_by('-rating').first()
+print(best_user.username, best_user.rating)
+
+Выведите дату добавления, username автора, рейтинг, заголовок и превью лучшей статьи:
+
+best_article = Article.objects.order_by('-rating').first()
+print(best_article.created_date, best_article.author.username, best_article.rating, best_article.title, best_article.preview)
+
+Выведите все комментарии к лучшей статье:
+
+comments = Comment.objects.filter(post=best_article)
+for comment in comments:
+    print(comment.created_date, comment.user.username, comment.rating, comment.text)
+
+
